@@ -1,0 +1,24 @@
+<h1>Applicants#upload</h1>
+
+<%= form_for @applicant do |f| %>
+    <% if @applicant.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(f.errors.count, "error") %> prohibited this applicant from being saved:</h2>
+
+          <ul>
+            <% @applicant.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :attachment %> :
+      <%= f.file_field :attachment, accept: 'attachment/zip' %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Save", class: "btn btn-primary"  %>
+    </div>
+<% end %>

@@ -1,0 +1,25 @@
+<p>
+  <strong>Challenge_Show:</strong>
+  ("<%= @applicant.name %>"님 환영합니다!)
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @challenge.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @challenge.description %>
+</p>
+
+<p>
+<%= form_for @applicant do |f| %>
+    <%= f.label :Upload_File %> :
+    <%= f.file_field :attachment %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+<% end %>
+</p>
+
+<%= link_to 'Edit', edit_challenge_path(@challenge) %> |
+<%= link_to 'Back', challenges_path %>

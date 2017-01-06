@@ -1,0 +1,30 @@
+<h1> Listing Appicants </h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Challenge</th>
+      <th>Score</th>
+      <th colspan = "4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @applicants.each do |applicant| %>
+      <tr>
+        <td><%= applicant.name %></td>
+        <td><%= applicant.email %></td>
+        <td><%= applicant.challenge.title %></td>
+        <td><%= applicant.score %></td>
+        <td><%= link_to 'Show', applicant %></td>
+        <td><%= link_to 'Edit', edit_applicant_path(applicant) %></td>
+        <td><%= link_to 'Destroy', applicant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Applicant', new_applicant_path %>

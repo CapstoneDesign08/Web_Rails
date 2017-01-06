@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <TITLE>사진바꾸기</TITLE>
+    <SCRIPT language="javascript">
+        var cnt =1;
+        function change() {
+            var image1 = document.getElementById("img1");
+
+            cnt++;
+            switch(cnt){
+
+                case 1:
+                    image1.src = "/gifs/android-explosion.gif";
+                    break;
+                case 2:
+                    image1.src = "/gifs/ben-and-mike.gif";
+                    break;
+                case 3:
+                    image1.src = "/gifs/book-dominos.gif";
+                    break;
+                case 4:
+                    image1.src = "/gifs/cat.gif";
+                    break;
+                case 5:
+                    image1.src =  "/gifs/infinite-andrew.gif";
+                    break;
+                case 6:
+                    image1.src = "/gifs/compiler-bot.gif";
+                    break;
+                case 7:
+                    image1.src = "/gifs/cowboy-coder.gif";
+                    break;
+                default:
+                    cnt = 0;
+                    break;
+            }
+
+        }
+    </SCRIPT>
+</HEAD>
+<BODY>
+<FORM>
+    <H2>버튼을 클릭하면 사진이 바뀐다.</H2>
+    <INPUT type="button" value="Change picture" onclick="change()"/>
+
+    <span id="fooBar">&nbsp;</span>
+</FORM>
+<img src="/gifs/android-explosion.gif" id = "img1"/>
+
+</BODY>
+</html>
