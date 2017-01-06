@@ -35,7 +35,7 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       if @applicant.update(applicant_params)
         format.html {redirect_to @applicant, notice: 'Applicant was successfully updated'}
-        if @applicant.attachment
+        if @applicant.attachments3 = @applicant.attachment
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "output is #{output}"
           output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
@@ -51,6 +51,7 @@ class ApplicantsController < ApplicationController
         format.html {render :edit}
       end
     end
+    @applicant.update(applicant_params)
   end
 
   def destroy

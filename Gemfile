@@ -54,7 +54,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap-sass'
 
-gem 'carrierwave'
+# S3 Upload
+gem 'carrierwave-aws'
+gem 'fog'
 
-#toke
+# Toke
 gem 'has_secure_token'

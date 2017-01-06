@@ -18,3 +18,4 @@
 .lock
 .yml
 /unzip/*
+/config/initializers/fog.rb
