@@ -33,7 +33,7 @@ public class GifRepository {
         return null;
     }
     public List<Gif> findBycategoryId(int id){
-        // 빈 리스트에 id에 해당하는 Gif object를 추가
+       
         List<Gif> gifs = new ArrayList<>();
         for(Gif gif : ALL_GIFS){
             if(gif.getCategoryid() == id){

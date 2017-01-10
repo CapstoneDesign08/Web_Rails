@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   resources :applicants
   resources :challenges
   root :to => 'applicants#index'
+  get 'applicants/:id/page' => 'applicants#page', as: 'page_applicant'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

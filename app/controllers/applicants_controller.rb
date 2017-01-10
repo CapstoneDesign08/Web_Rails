@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload, :page]
 
   def index
     @applicants = Applicant.all
@@ -35,7 +35,7 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       if @applicant.update(applicant_params)
         format.html {redirect_to @applicant, notice: 'Applicant was successfully updated'}
-        if @applicant.attachments3 = @applicant.attachment
+        if @applicant.attachment
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "output is #{output}"
           output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
@@ -46,6 +46,14 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
           puts "output is #{output}"
+=begin          system("sudo docker rm -f applicant_#{@applicant.id}")
+          puts "output is #{output}"
+          system("sudo docker create -v /home/user/WebTest/unzip/#{@applicant.id}:/home -p #{@applicant.id}001:8080 --name applicant_#{@applicant.id} springs")
+          puts "output is #{output}"
+          system("sudo docker start applicant_#{@applicant.id}")
+          puts "output is #{output}"
+          @applicant.attachments3 = @applicant.attachment
+=end
         end
       else
         format.html {render :edit}
@@ -61,7 +69,12 @@ class ApplicantsController < ApplicationController
     end
   end
 
+  def page
+    redirect_to "localhost:#{@applicant.id}001"
+  end
+
   def upload
+
   end
 
   private
