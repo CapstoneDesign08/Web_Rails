@@ -60,3 +60,6 @@ gem 'fog'
 
 # Toke
 gem 'has_secure_token'
+
+# Docker
+gem 'docker-api'

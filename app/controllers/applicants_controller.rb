@@ -1,5 +1,6 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload, :page]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload]
+  before_action :set_docker, only: [:update]
 
   def index
     @applicants = Applicant.all
@@ -46,6 +47,21 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
           puts "output is #{output}"
+
+          if @docker
+            @docker.delete(:force => true)
+          end
+
+          @docker = Docker::Container.create(
+                                         'name': "applicant_#{@applicant.id}",
+                                         'Image': 'springs',
+                                         'ExposedPorts': { '8080/tcp' => {} },
+                                         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
+                                                        'Binds': ["/home/user/WebTest/unzip/#{@applicant.id}:/home"]
+                                         })
+
+          @docker.start
+
 =begin          system("sudo docker rm -f applicant_#{@applicant.id}")
           puts "output is #{output}"
           system("sudo docker create -v /home/user/WebTest/unzip/#{@applicant.id}:/home -p #{@applicant.id}001:8080 --name applicant_#{@applicant.id} springs")
@@ -70,7 +86,7 @@ class ApplicantsController < ApplicationController
   end
 
   def page
-    redirect_to "localhost:#{@applicant.id}001"
+
   end
 
   def upload
@@ -83,8 +99,17 @@ class ApplicantsController < ApplicationController
     @applicant = Applicant.find(params[:id])
   end
 
+  def set_docker
+    begin
+    @docker = Docker::Container.get("applicant_#{@applicant.id}")
+    rescue
+      @docker = nil
+    end
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def applicant_params
     params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id)
   end
 end
+

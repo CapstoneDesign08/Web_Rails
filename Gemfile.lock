@@ -71,6 +71,9 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
     debug_inspector (0.0.2)
+    docker-api (1.33.1)
+      excon (>= 0.38.0)
+      json
     erubis (2.7.0)
     excon (0.54.0)
     execjs (2.7.0)
@@ -321,6 +324,7 @@ DEPENDENCIES
   byebug
   carrierwave-aws
   coffee-rails (~> 4.2)
+  docker-api
   fog
   has_secure_token
   jbuilder (~> 2.5)
