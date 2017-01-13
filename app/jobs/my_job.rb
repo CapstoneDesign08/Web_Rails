@@ -4,14 +4,14 @@ class MyJob < ApplicationJob
 
   before_enqueue do |job|
     # 잡 인스턴스로 처리해야하는 작업
-    @applicant = Applicant.find_by(id: job.arguments[1])
+    app_id = Applicant.all.find_by(id: job.arguments)
 
     @docker = Docker::Container.create(
-        'name': "applicant_#{@applicant.id}",
+        'name': "applicant_#{app_id.id}",
         'Image': 'springs',
         'ExposedPorts': { '8080/tcp' => {} },
-        'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/jeonhyochang/asd/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{app_id.id}"}]},
+        'Binds': ["/home/jeonhyochang/asd/Web_Rails/unzip/#{app_id.id}:/home"]
     })
     @docker.start
   end
