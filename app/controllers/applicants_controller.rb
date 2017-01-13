@@ -52,24 +52,7 @@ class ApplicantsController < ApplicationController
             @docker.delete(:force => true)
           end
 
-          @docker = Docker::Container.create(
-                                         'name': "applicant_#{@applicant.id}",
-                                         'Image': 'springs',
-                                         'ExposedPorts': { '8080/tcp' => {} },
-                                         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-                                                        'Binds': ["/home/user/WebTest/unzip/#{@applicant.id}:/home"]
-                                         })
-
-          @docker.start
-
-=begin          system("sudo docker rm -f applicant_#{@applicant.id}")
-          puts "output is #{output}"
-          system("sudo docker create -v /home/user/WebTest/unzip/#{@applicant.id}:/home -p #{@applicant.id}001:8080 --name applicant_#{@applicant.id} springs")
-          puts "output is #{output}"
-          system("sudo docker start applicant_#{@applicant.id}")
-          puts "output is #{output}"
-          @applicant.attachments3 = @applicant.attachment
-=end
+          MyJob.set(wait: 5.seconds).perform_later @applicant.id
         end
       else
         format.html {render :edit}

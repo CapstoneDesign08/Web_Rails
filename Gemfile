@@ -63,3 +63,9 @@ gem 'has_secure_token'
 
 # Docker
 gem 'docker-api'
+
+# Active Job
+gem 'adapter'
+gem 'activejob'
+gem 'sidekiq'
+gem 'sidekiq-limit_fetch'

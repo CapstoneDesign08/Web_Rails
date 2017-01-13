@@ -20,7 +20,7 @@ user01 = Applicant.create(:name => 'Cha',
                       :email => 'aaa@gmail.com',
                       :challenge => challenge01)
 user02 = Applicant.create(:name => 'Jeon',
-                          :email => 'bbbdennischa50@gmail.com',
+                          :email => 'bbb@gmail.com',
                           :challenge => challenge02)
 user03 = Applicant.create(:name => 'Hong01',
                           :email => 'ccc@gmail.com',
