@@ -1,12 +1,21 @@
 class ApplicantsController < ApplicationController
   before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload]
-  before_action :set_docker, only: [:update]
+  before_action :set_docker, only: [:update, :show]
 
   def index
     @applicants = Applicant.all
   end
 
   def show
+    begin
+      @docker.start
+      @command = ['bash', '-c', 'gradle clean']
+      @docker.exec(@command,detach: true)
+      @command = ['bash', '-c', 'gradle run']
+      puts @docker.exec(@command, detach: true)
+    rescue
+      puts  "Docker Run Fail"
+    end
   end
 
   def new
@@ -35,7 +44,7 @@ class ApplicantsController < ApplicationController
   def update
     respond_to do |format|
       if @applicant.update(applicant_params)
-        format.html {redirect_to @applicant, notice: 'Applicant was successfully updated'}
+        format.html {redirect_to @applicant.challenge, notice: 'Applicant was successfully updated'}
         if @applicant.attachment
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "output is #{output}"
@@ -51,7 +60,15 @@ class ApplicantsController < ApplicationController
           if @docker
             @docker.delete(:force => true)
           end
-
+          @docker = Docker::Container.create(
+              'name': "applicant_#{@applicant.id}",
+              'Image': 'cs2012/springs',
+              'Tty': true,
+              'Interactive': true,
+              'ExposedPorts': { '8080/tcp' => {} },
+              'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
+              'Binds': ["/home/user/Web_Rails/unzip/#{@applicant.id}:/home"]
+          })
           MyJob.perform_later @applicant.id
         end
       else

@@ -15,12 +15,13 @@
 
 <p>
   <strong>File:</strong>
-  <%= link_to 'Page', page_applicant_path(@applicant)%>
+  <%= link_to 'Download', page_applicant_path(@applicant)%>
 </p>
 
 <p>
   <strong>View_Site:</strong>
-  <%= link_to 'Link', page_applicant_path(@applicant)%>
+  <% id = ((@applicant.id).to_s) %>
+  <%= link_to 'Link', 'http://localhost:100' + id, :target => '_blank'%>
 </p>
 
 <%= link_to 'Edit', edit_applicant_path(@applicant) %>|

@@ -10,30 +10,39 @@ class MyJob < ApplicationJob
   around_enqueue do |job, block|
     # 실행 전에 해야하는 작업
     block.call
-    # 실행 후에 해야하는 작업
+
   end
 
   def perform(*id)
     # 나중에 실행할 작업
-    set_docker(id)
-    @applicant = Applicant.all.find_by(id: id)
-    @command = ['bash', '-c', 'gradle clean']
-    begin
-      @docker.exec(@command)
-      @command = ['bash', '-c', 'gradle test']
-      @applicant.log = @docker.exec(@command)
-    rescue
-      @applicant.log = 'Fail'
-    end
 
+    @applicant = Applicant.find_by(id: id)
+    @docker = get_docker @applicant.id
+
+    begin
+      @docker.start
+      @command = ['bash', '-c', 'gradle clean']
+      @docker.exec(@command, detach: true)
+      @command = ['bash', '-c', 'gradle test']
+      @log =  @docker.exec(@command).to_s
+      @i = @log.index('completed')
+      @applicant.log = "PASSED : #{@log[@i-8]} / FAILED  :  #{@log[@i + 11]}"
+      @applicant.save
+      @docker.stop
+    rescue
+     if @docker
+      @docker.delete(force: true)
+      end
+      puts "applicant_#{@applicant.id} docker run failed"
+    end
   end
 
 
-  def set_docker(*id)
+  def get_docker(id)
     begin
-      @docker = Docker::Container.get("applicant_#{id}")
+      return Docker::Container.get("applicant_#{id}")
     rescue
-      @docker = nil
+      return nil
     end
   end
 end
