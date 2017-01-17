@@ -1,28 +1,39 @@
 class MyJob < ApplicationJob
   # 넣어줄 특정 큐 이름
   queue_as :docker_queue
-
+=begin
   before_enqueue do |job|
     # 잡 인스턴스로 처리해야하는 작업
-    app_id = Applicant.all.find_by(id: job.arguments)
-
-    @docker = Docker::Container.create(
-        'name': "applicant_#{app_id.id}",
-        'Image': 'springs',
-        'ExposedPorts': { '8080/tcp' => {} },
-        'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{app_id.id}"}]},
-        'Binds': ["/home/jeonhyochang/asd/Web_Rails/unzip/#{app_id.id}:/home"]
-    })
-    @docker.start
   end
+=end
 
-  around_perform do |job, block|
+  around_enqueue do |job, block|
     # 실행 전에 해야하는 작업
     block.call
     # 실행 후에 해야하는 작업
   end
 
-  def perform(*args)
+  def perform(*id)
     # 나중에 실행할 작업
+    set_docker(id)
+    @applicant = Applicant.all.find_by(id: id)
+    @command = ['bash', '-c', 'gradle clean']
+    begin
+      @docker.exec(@command)
+      @command = ['bash', '-c', 'gradle test']
+      @applicant.log = @docker.exec(@command)
+    rescue
+      @applicant.log = 'Fail'
+    end
+
+  end
+
+
+  def set_docker(*id)
+    begin
+      @docker = Docker::Container.get("applicant_#{id}")
+    rescue
+      @docker = nil
+    end
   end
 end

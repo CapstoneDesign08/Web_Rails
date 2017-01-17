@@ -52,7 +52,7 @@ class ApplicantsController < ApplicationController
             @docker.delete(:force => true)
           end
 
-          MyJob.set(wait: 5.seconds).perform_later @applicant.id
+          MyJob.perform_later @applicant.id
         end
       else
         format.html {render :edit}

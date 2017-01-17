@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170106031939) do
+ActiveRecord::Schema.define(version: 20170117021736) do
 
   create_table "applicants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20170106031939) do
     t.datetime "updated_at",   null: false
     t.string   "attachment"
     t.string   "attachments3"
+    t.string   "log"
     t.index ["challenge_id"], name: "index_applicants_on_challenge_id", using: :btree
   end
 
