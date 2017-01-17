@@ -32,16 +32,6 @@ class ChallengesController < ApplicationController
       render json: {error: 'Not Authorized'}, status: 401 unless @applicant
     end
 
-
-=begin
-    if @applicant
-     log_in @applicant
-    else
-      @applicant = Applicant.find_by(token: params[:token])
-      render json: {error: 'Not Authorized'}, status: 401 unless @applicant
-      end
-=end
-
   end
 
   def update

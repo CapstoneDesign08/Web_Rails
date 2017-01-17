@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :upload]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy]
   before_action :set_docker, only: [:update, :show]
 
   def index
@@ -86,10 +86,6 @@ class ApplicantsController < ApplicationController
   end
 
   def page
-
-  end
-
-  def upload
 
   end
 
