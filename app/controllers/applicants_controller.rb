@@ -7,6 +7,8 @@ class ApplicantsController < ApplicationController
   end
 
   def show
+    RunJob.perform_later @applicant.id
+
     begin
       @docker.start
       @command = ['bash', '-c', 'gradle clean']
@@ -69,7 +71,7 @@ class ApplicantsController < ApplicationController
               'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
               'Binds': ["/home/user/Web_Rails/unzip/#{@applicant.id}:/home"]
           })
-          MyJob.perform_later @applicant.id
+          TestJob.perform_later @applicant.id
         end
       else
         format.html {render :edit}
