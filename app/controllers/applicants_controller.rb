@@ -7,17 +7,8 @@ class ApplicantsController < ApplicationController
   end
 
   def show
+    render :show
     RunJob.perform_later @applicant.id
-
-    begin
-      @docker.start
-      @command = ['bash', '-c', 'gradle clean']
-      @docker.exec(@command,detach: true)
-      @command = ['bash', '-c', 'gradle run']
-      puts @docker.exec(@command, detach: true)
-    rescue
-      puts  "Docker Run Fail"
-    end
   end
 
   def new
@@ -59,18 +50,7 @@ class ApplicantsController < ApplicationController
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
           puts "output is #{output}"
 
-          if @docker
-            @docker.delete(:force => true)
-          end
-          @docker = Docker::Container.create(
-              'name': "applicant_#{@applicant.id}",
-              'Image': 'cs2012/springs',
-              'Tty': true,
-              'Interactive': true,
-              'ExposedPorts': { '8080/tcp' => {} },
-              'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-              'Binds': ["/home/user/Web_Rails/unzip/#{@applicant.id}:/home"]
-          })
+
           TestJob.perform_later @applicant.id
         end
       else

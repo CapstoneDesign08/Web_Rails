@@ -14,11 +14,28 @@ class RunJob < ApplicationJob
     @docker = get_docker @applicant.id
 
     begin
-      @docker.start
+      if @docker
+        @docker.delete(:force => true)
+      end
+      @docker = Docker::Container.create(
+          'name': "applicant_#{@applicant.id}_run",
+          'Image': 'cs2012/springs',
+          'Tty': true,
+          'Interactive': true,
+          'ExposedPorts': { '8080/tcp' => {} },
+          'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
+                         'Binds': ["/home/user/RubymineProjects/Web_Rails/unzip/#{@applicant.id}:/home"]
+          })
 
-      @command = ['bash', '-c', 'gradle clean']
+      @docker.start
+      @command = ['bash', '-c', 'gradle run']
       @docker.exec(@command, detach: true)
 
+      #slepp 30 초 떄문에 30초 뒤에 접근 이 문제만 해결하면 될듯
+      #sleep 30
+     # if @docker
+      # @docker.delete(force: true)
+      #end
     rescue
       if @docker
         @docker.delete(force: true)

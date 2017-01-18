@@ -14,20 +14,33 @@ class TestJob < ApplicationJob
     @docker = get_docker @applicant.id
 
     begin
+      if @docker
+        @docker.delete(:force => true)
+      end
+      @docker = Docker::Container.create(
+          'name': "applicant_#{@applicant.id}_test",
+          'Image': 'cs2012/springs',
+          'Tty': true,
+          'Interactive': true,
+          'ExposedPorts': { '8080/tcp' => {} },
+          'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
+                         'Binds': ["/home/user/RubymineProjects/Web_Rails/unzip/#{@applicant.id}:/home"]
+          })
       @docker.start
-
-      @command = ['bash', '-c', 'gradle clean']
-      @docker.exec(@command, detach: true)
+      #@command = ['bash', '-c', 'gradle clean']
+      #@docker.exec(@command, detach: true)
       @command = ['bash', '-c', 'gradle test']
-
       @log =  @docker.exec(@command).to_s
-      @i = @log.index('completed')
+      puts @log
+      @i = @log.index('completed').to_i
 
       @applicant.log = "PASSED : #{@log[@i-8]} / FAILED  :  #{@log[@i + 11]}"
       @applicant.save
 
-      @docker.stop
-
+      #delete
+      if @docker
+        @docker.delete(force: true)
+      end
     rescue
       if @docker
         @docker.delete(force: true)
