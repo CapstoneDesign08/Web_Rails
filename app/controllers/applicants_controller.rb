@@ -37,14 +37,18 @@ class ApplicantsController < ApplicationController
   def update
     respond_to do |format|
       if @applicant.update(applicant_params)
+        puts "update start!"
         format.html {redirect_to @applicant.challenge, notice: 'Applicant was successfully updated'}
         if @applicant.attachment
+          puts "docker start!"
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "output is #{output}"
+=begin
           output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
           puts  "output is #{output}"
           output = system("sudo cp -r ./tmp/test ./unzip/#{@applicant.id}/src")
           puts "output is #{output}"
+=end
           output = system("sudo rm -f ./public/#{@applicant.attachment}")
           puts "output is #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")

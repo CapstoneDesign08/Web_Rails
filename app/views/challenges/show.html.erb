@@ -21,6 +21,14 @@
 <% end %>
 </p>
 
+<p>
+<%= form_for(@challenge, remote: true) do |g| %>
+      <%= @applicant.log %>
+      </br>
+    <%= g.submit 'Submit' %>
+<% end %>
+</p>
+
 <p class="result">
 
 <%= link_to 'Edit', edit_challenge_path(@challenge) %> |

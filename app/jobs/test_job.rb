@@ -14,37 +14,24 @@ class TestJob < ApplicationJob
     @docker = get_docker @applicant.id
 
     begin
-      if @docker
-        @docker.delete(:force => true)
-      end
-      @docker = Docker::Container.create(
-          'name': "applicant_#{@applicant.id}_test",
-          'Image': 'cs2012/springs',
-          'Tty': true,
-          'Interactive': true,
-          'ExposedPorts': { '8080/tcp' => {} },
-          'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-                         'Binds': ["/home/user/RubymineProjects/Web_Rails/unzip/#{@applicant.id}:/home"]
-          })
-      @docker.start
-      #@command = ['bash', '-c', 'gradle clean']
-      #@docker.exec(@command, detach: true)
-      @command = ['bash', '-c', 'gradle test']
-      @log =  @docker.exec(@command).to_s
-      puts @log
-      @i = @log.index('completed').to_i
+      delete_docker
 
-      @applicant.log = "PASSED : #{@log[@i-8]} / FAILED  :  #{@log[@i + 11]}"
+      test_docker
+
+      @log =  @docker.exec(@command).to_s
+
+      @test_pass = @log.scan("PASSED")
+      @test_total = @log.scan("com.")
+
+      # puts @log
+      @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_total.size - @test_pass.size}"
       @applicant.save
 
-      #delete
-      if @docker
-        @docker.delete(force: true)
-      end
+      # delete
+      delete_docker
+
     rescue
-      if @docker
-        @docker.delete(force: true)
-      end
+      delete_docker
       puts "applicant_#{@applicant.id} docker run failed"
     end
   end
