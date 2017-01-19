@@ -17,7 +17,5 @@
 .byebug_history
 .lock
 .yml
-# /public/*
-# /unzip/*
 /config/database.yml
 /config/initializers/fog.rb
