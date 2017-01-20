@@ -18,7 +18,9 @@ class TestJob < ApplicationJob
 
       test_docker
 
-      @log =  @docker.exec(@command).to_s
+      @print=  @docker.exec(@command)
+      @log = @print.to_s
+      puts @print
 
       @test_pass = @log.scan("PASSED")
       @test_total = @log.scan("com.")
@@ -26,10 +28,8 @@ class TestJob < ApplicationJob
       # puts @log
       @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_total.size - @test_pass.size}"
       @applicant.save
-
       # delete
       delete_docker
-
     rescue
       delete_docker
       puts "applicant_#{@applicant.id} docker run failed"
@@ -38,7 +38,7 @@ class TestJob < ApplicationJob
 
   def get_docker(id)
     begin
-      return Docker::Container.get("applicant_#{id}")
+      return Docker::Container.get("applicant_#{id}_test")
     rescue
       return nil
     end

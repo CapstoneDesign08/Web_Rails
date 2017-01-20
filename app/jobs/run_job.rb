@@ -28,7 +28,7 @@ class RunJob < ApplicationJob
 
   def get_docker(id)
     begin
-      return Docker::Container.get("applicant_#{id}")
+      return Docker::Container.get("applicant_#{id}_run")
     rescue
       return nil
     end

@@ -36,6 +36,7 @@ class ChallengesController < ApplicationController
 
   def update
     respond_to do |format|
+
       if @challenge.update(challenge_params)
         format.html {redirect_to @challenge, notice: 'Applicant was successfully updated'}
       else

@@ -91,7 +91,7 @@ class ApplicantsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def applicant_params
-    params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id)
+    params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id, :log)
   end
 end
 
