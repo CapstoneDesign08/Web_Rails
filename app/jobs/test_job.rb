@@ -10,7 +10,9 @@ class TestJob < ApplicationJob
 
   def perform(*id)
     # 실행할 작업
+
     @applicant = Applicant.find_by(id: id)
+    @applicant.log = nil
     @docker = get_docker @applicant.id
 
     begin
