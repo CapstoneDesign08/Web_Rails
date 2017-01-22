@@ -11,14 +11,17 @@ class TestJob < ApplicationJob
   def perform(*id)
     # 실행할 작업
     @applicant = Applicant.find_by(id: id)
+    @applicant.log = nil
+    @applicant.save
     @docker = get_docker @applicant.id
 
-    begin
+    #begin
       delete_docker
-
       test_docker
-
-      @log =  @docker.exec(@command).to_s
+      @command = ['bash', '-c', 'gradle test']
+      @print = @docker.exec(@command)
+      @log =  @print.to_s
+      puts @print
 
       @test_pass = @log.scan("PASSED")
       @test_total = @log.scan("com.")
@@ -30,15 +33,16 @@ class TestJob < ApplicationJob
       # delete
       delete_docker
 
-    rescue
-      delete_docker
-      puts "applicant_#{@applicant.id} docker run failed"
-    end
+    #rescue
+
+     # delete_docker
+      #puts "applicant_#{@applicant.id} docker run failed"
+    #end
   end
 
   def get_docker(id)
     begin
-      return Docker::Container.get("applicant_#{id}")
+      return Docker::Container.get("applicant_#{id}_test")
     rescue
       return nil
     end

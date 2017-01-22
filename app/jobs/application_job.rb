@@ -2,30 +2,29 @@ class ApplicationJob < ActiveJob::Base
   def test_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_test",
-        'Image': 'cs2012/springs',
+        'Image': 'dennischa50/springs',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/jeonhyochang/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/cs2012/문서/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start
-    #@command = ['bash', '-c', 'gradle clean']
-    #@docker.exec(@command, detach: true)
-    @command = ['bash', '-c', 'gradle test']
+    @command = ['bash', '-c', 'gradle clean']
+    @docker.exec(@command)
 
   end
 
   def run_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_run",
-        'Image': 'cs2012/springs',
+        'Image': 'dennischa50/springs',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
-        'Binds': ["/home/jeonhyochang/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/cs2012/문서/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start

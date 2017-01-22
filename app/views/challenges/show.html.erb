@@ -1,3 +1,4 @@
+<%= hidden_field_tag :current_id, "#{@applicant.id}"%>
 <p>
   <strong>Challenge_Show:</strong>
   ("<%= @applicant.name %>"님 환영합니다!)
@@ -22,11 +23,9 @@
 </p>
 
 <p>
-<%= form_for(@challenge, remote: true) do |g| %>
-      <%= @applicant.log %>
-      </br>
-    <%= g.submit 'Submit' %>
-<% end %>
+  <%= form_for(@challenge, remote: true) do |g| %>
+      <%= g.submit "Apprise", class: "Apprised" %>
+  <%end%>
 </p>
 
 <p class="result">

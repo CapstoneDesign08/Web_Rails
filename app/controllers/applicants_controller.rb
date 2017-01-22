@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging]
   before_action :set_docker, only: [:update, :show]
 
   def index
@@ -18,7 +18,10 @@ class ApplicantsController < ApplicationController
 
   def edit
     @challenges = Challenge.all
+  end
 
+  def logging
+    render text:@applicant.log
   end
 
   def create
@@ -55,7 +58,7 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
 
 
-          TestJob.perform_later @applicant.id
+
         end
       else
         format.html {render :edit}
