@@ -21,7 +21,7 @@ class ApplicantsController < ApplicationController
   end
 
   def logging
-    render text:@applicant.log
+    render plain:@applicant.log
   end
 
   def create
@@ -40,10 +40,8 @@ class ApplicantsController < ApplicationController
   def update
     respond_to do |format|
       if @applicant.update(applicant_params)
-        puts "update start!"
         format.html {redirect_to @applicant.challenge, notice: 'Applicant was successfully updated'}
         if @applicant.attachment
-          puts "docker start!"
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "output is #{output}"
 =begin
@@ -56,7 +54,9 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
           puts "output is #{output}"
-          @applicant.attachments3 = @applicant.attachment
+
+          # upload S3
+          # @applicant.attachments3 = @applicant.attachment
         end
       else
         format.html {render :edit}
@@ -66,7 +66,7 @@ class ApplicantsController < ApplicationController
   end
 
   def destroy
-      @applicant.destroy
+    @applicant.destroy
     respond_to do |format|
       format.html {redirect_to applicants_url, notice: 'Applicant was successfully destroyed. ' }
     end
@@ -84,7 +84,7 @@ class ApplicantsController < ApplicationController
 
   def set_docker
     begin
-    @docker = Docker::Container.get("applicant_#{@applicant.id}")
+      @docker = Docker::Container.get("applicant_#{@applicant.id}")
     rescue
       @docker = nil
     end
