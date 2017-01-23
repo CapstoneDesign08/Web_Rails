@@ -56,9 +56,7 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
           puts "output is #{output}"
-
-
-
+          @applicant.attachments3 = @applicant.attachment
         end
       else
         format.html {render :edit}

@@ -7,7 +7,7 @@ class ApplicationJob < ActiveJob::Base
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/cs2012/문서/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start
@@ -24,18 +24,12 @@ class ApplicationJob < ActiveJob::Base
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
-        'Binds': ["/home/cs2012/문서/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start
     @command = ['bash', '-c', 'gradle run']
     @docker.exec(@command, detach: true)
-
-    #slepp 30 초 떄문에 30초 뒤에 접근 이 문제만 해결하면 될듯
-    #sleep 30
-    # if @docker
-    # @docker.delete(force: true)
-    #end
   end
 
   def delete_docker

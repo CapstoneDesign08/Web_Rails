@@ -14,7 +14,7 @@ chgresult =->
       $('.result').text(json)
     )
     error: (request, status, error) ->(
-#alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+      alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
       $('.result').text("TEST error")
     )
   );
@@ -31,4 +31,4 @@ waitime =->
   $ dt.setMinutes(dt.getMinutes()+1.5);
   $('.result').text("prediction time - "+dt.toTimeString())
   $('.Apprised').val("wait...")
-  setTimeout(run, 10000);
+  setTimeout(run, 90000);

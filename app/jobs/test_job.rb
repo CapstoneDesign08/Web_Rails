@@ -15,7 +15,7 @@ class TestJob < ApplicationJob
     @applicant.save
     @docker = get_docker @applicant.id
 
-    #begin
+    begin
       delete_docker
       test_docker
       @command = ['bash', '-c', 'gradle test']
@@ -25,19 +25,16 @@ class TestJob < ApplicationJob
 
       @test_pass = @log.scan("PASSED")
       @test_total = @log.scan("com.")
-
-      # puts @log
       @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_total.size - @test_pass.size}"
       @applicant.save
 
       # delete
       delete_docker
 
-    #rescue
-
-     # delete_docker
-      #puts "applicant_#{@applicant.id} docker run failed"
-    #end
+    rescue
+     delete_docker
+     puts "applicant_#{@applicant.id} docker run failed"
+    end
   end
 
   def get_docker(id)
