@@ -1,12 +1,9 @@
 class TestJob < ApplicationJob
+  include ActiveJob::TrafficControl::Throttle
+
+  throttle threshold: 1, period: 10.second, drop: false
   # 넣어줄 특정 큐 이름
   queue_as :test_queue
-
-  around_enqueue do |job, block|
-    # 실행 전에 해야하는 작업
-    block.call
-    # 실행 후에 해야하는 작업
-  end
 
   def perform(*id)
     # 실행할 작업
@@ -21,7 +18,7 @@ class TestJob < ApplicationJob
       @command = ['bash', '-c', 'gradle test']
       @print = @docker.exec(@command)
       @log =  @print.to_s
-      puts @print
+      # puts @print
 
       @test_pass = @log.scan("PASSED")
       @test_total = @log.scan("com.")

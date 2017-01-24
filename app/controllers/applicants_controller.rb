@@ -1,6 +1,7 @@
 class ApplicantsController < ApplicationController
   before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging]
   before_action :set_docker, only: [:update, :show]
+  around_action :handle_exceptions
 
   def index
     @applicants = Applicant.all
@@ -94,5 +95,20 @@ class ApplicantsController < ApplicationController
   def applicant_params
     params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id, :log)
   end
+
+  def handle_exceptions
+    begin
+      yield
+    rescue NotImplementedError
+      puts "Run_error!!"
+      sleep 30
+      RunJob.perform_later @applicant.id
+=begin
+      @applicant.log = "Test error. Please, Restart."
+      @applicant.save
+=end
+    end
+  end
+
 end
 

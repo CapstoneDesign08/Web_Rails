@@ -7,7 +7,7 @@ class ApplicationJob < ActiveJob::Base
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/jeonhyochang/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start
@@ -24,7 +24,7 @@ class ApplicationJob < ActiveJob::Base
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["/home/jeonhyochang/Web_Rails/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start
