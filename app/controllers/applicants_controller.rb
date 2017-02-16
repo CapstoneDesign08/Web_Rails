@@ -43,7 +43,7 @@ class ApplicantsController < ApplicationController
         format.html {redirect_to @applicant.challenge, notice: 'Applicant was successfully updated'}
         if @applicant.attachment
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
-          puts  "output is #{output}"
+          puts  "unzip : #{output}"
 =begin
           output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
           puts  "output is #{output}"
@@ -51,12 +51,12 @@ class ApplicantsController < ApplicationController
           puts "output is #{output}"
 =end
           output = system("sudo rm -f ./public/#{@applicant.attachment}")
-          puts "output is #{output}"
+          puts "rm : #{output}"
           output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
-          puts "output is #{output}"
+          puts "zip : #{output}"
 
           # upload S3
-          # @applicant.attachments3 = @applicant.attachment
+          #@applicant.attachments3 = @applicant.attachment
         end
       else
         format.html {render :edit}

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :applicants
   resources :challenges
+
   get '/applicants/logging/:id/', to: 'applicants#logging'
   root :to => 'applicants#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

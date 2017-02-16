@@ -1,31 +1,69 @@
 <%= hidden_field_tag :current_id, "#{@applicant.id}"%>
+
+<p>
+  <strong>
+    <span style="font-size: 50pt"> Spring_web_test </span>
+  </strong>
+  <br>
+</p>
+
 <p>
   <strong>Challenge_Show:</strong>
   ("<%= @applicant.name %>"님 환영합니다!)
 </p>
 
 <p>
-  <strong>Title:</strong>
+  <strong>Title : </strong>
   <%= @challenge.title %>
 </p>
 
 <p>
-  <strong>Description:</strong>
-  <%= @challenge.description %>
+  <strong>Goal : </strong>
+  <%= @challenge.goal %>
+</p>
+
+<table>
+  <tr>
+    <td><strong>Information : </strong></td>
+    <td><strong>Ex : </strong></td>
+  </tr>
+
+  <tr>
+    <td><textarea readonly="readonly" rows="25" cols="120" ><%= @challenge.information %></textarea></td>
+    <td valign="top" ><%= image_tag "1/1.png", height: '320', width: '410' %></td>
+  </tr>
+
+</table>
+
+<p>
+  <strong>Description : </strong>
+  <br>
+  <textarea readonly="readonly" rows="5" cols="120" ><%= @challenge.description %></textarea>
+
+</p>
+
+<p>
+  <strong>File_Download : </strong>
+
+</p>
+
+<p>
+  <strong>File_Download : </strong>
+  <%= link_to 'link', "/download/1/TankTest_Applicant.zip" %>
+  <!--(, download: 'data.zip')-->
 </p>
 
 <p>
 <%= form_for @applicant do |f| %>
-      <%= f.label :Upload_File %> :
+      <strong>Upload_File : </strong>
       <%= f.file_field :attachment, accept: '.zip'  %>
       <%= f.submit "Upload" %>
 <% end %>
 </p>
 
-
-
 <p>
   <%= form_for(@challenge, remote: true) do |g| %>
+      <strong>Score : </strong>
       <%= g.submit "Apprise", class: "Apprised" %>
   <%end%>
 </p>

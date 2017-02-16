@@ -2,7 +2,7 @@ class ApplicationJob < ActiveJob::Base
   def test_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_test",
-        'Image': 'dennischa50/springs',
+        'Image': 'feed/dennischa50/springs',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
@@ -19,7 +19,7 @@ class ApplicationJob < ActiveJob::Base
   def run_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_run",
-        'Image': 'dennischa50/springs',
+        'Image': 'feed/dennischa50/springs',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },

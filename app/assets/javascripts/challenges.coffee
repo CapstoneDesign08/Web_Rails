@@ -35,6 +35,6 @@ run = ->
 waitime =->
   $('.Apprised').unbind("click");
   $ dt = new Date()
-  $ dt.setSeconds(dt.getSeconds()+60);
+  $ dt.setSeconds(dt.getSeconds()+40);
   $('.result').text("prediction time - "+dt.toTimeString())
-  setTimeout(run, 60000);
+  setTimeout(run, 40000);

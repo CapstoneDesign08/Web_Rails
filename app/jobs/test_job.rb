@@ -24,8 +24,8 @@ class TestJob < ApplicationJob
       puts @print
 
       @test_pass = @log.scan("PASSED")
-      @test_total = @log.scan("com.")
-      @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_total.size - @test_pass.size}"
+      @test_fail = @log.scan("$")
+      @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_fail.size/2}"
       @applicant.save
 
       # delete
