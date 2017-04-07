@@ -1,6 +1,7 @@
 class ChallengesController < ApplicationController
   before_action :set_challenge, only: [:show, :destroy, :update, :edit]
   before_action :set_applicant, only: [:show, :update]
+  around_action :handle_exceptions
 
   def index
     @challenges = Challenge.all
@@ -31,6 +32,7 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.json {render plain: @applicant.log}
       TestJob.perform_later @applicant.id
+
 =begin      if @challenge.update(challenge_params)
         format.html {redirect_to @challenge, notice: 'Applicant was successfully updated'}
       else
@@ -60,4 +62,19 @@ class ChallengesController < ApplicationController
   def challenge_params
     params.require(:challenge).permit(:title, :description)
   end
+
+  def handle_exceptions
+    begin
+      yield
+    rescue NotImplementedError
+      puts "Test_error!!"
+      sleep 30
+      TestJob.perform_later @applicant.id
+=begin
+      @applicant.log = "Test error. Please, Restart."
+      @applicant.save
+=end
+    end
+  end
+
 end
