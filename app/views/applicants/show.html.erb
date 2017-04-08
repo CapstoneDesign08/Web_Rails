@@ -13,10 +13,23 @@
   <%= @applicant.challenge.title %>
 </p>
 
+<!--- S3 다운로드
 <p>
   <strong>File:</strong>
-  <%= link_to 'Download', @applicant.attachments3_url%>
+  <%= link_to 'Download', @applicant.attachments3_url %>
 </p>
+--->
+
+<table>
+  <tr>
+    <td>
+      <strong>WebGL_Build : </strong>
+    </td>
+    <td>
+      <%= button_to 'Build', building_applicant_path %>
+    </td>
+  </tr>
+</table>
 
 <p>
   <strong>View_Site:</strong>

@@ -2,12 +2,6 @@ class RunJob < ApplicationJob
   # 넣어줄 특정 큐 이름
   queue_as :run_queue
 
-  around_enqueue do |job, block|
-    # 실행 전에 해야하는 작업
-    block.call
-    # 실행 후에 해야하는 작업
-  end
-
   def perform(*id)
     # 실행할 작업
     @applicant = Applicant.find_by(id: id)

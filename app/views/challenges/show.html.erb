@@ -30,7 +30,7 @@
 
   <tr>
     <td><textarea readonly="readonly" rows="25" cols="120" ><%= @challenge.information %></textarea></td>
-    <td valign="top" ><%= image_tag "1/1.png", height: '320', width: '410' %></td>
+    <td valign="top" ><%= image_tag "#{@challenge.id}/1.jpg", height: '320', width: '410' %></td>
   </tr>
 
 </table>
@@ -44,12 +44,7 @@
 
 <p>
   <strong>File_Download : </strong>
-
-</p>
-
-<p>
-  <strong>File_Download : </strong>
-  <%= link_to 'link', "/download/1/TankTest_Applicant.zip" %>
+  <%= link_to 'link', "/download/#{@challenge.id}/#{@challenge.title}.zip" %>
   <!--(, download: 'data.zip')-->
 </p>
 

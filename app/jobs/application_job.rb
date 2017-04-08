@@ -1,13 +1,17 @@
 class ApplicationJob < ActiveJob::Base
+
+  # unzip폴더의 경로를 입력하세요
+  @project_unzip_path = "/home/user/RubymineProjects/Web_Rails"
+
   def test_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_test",
-        'Image': 'feed/dennischa50/springs',
+        'Image': 'dennischa50/springs',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["#{@project_unzip_path}/unzip/#{@applicant.id}/:/home"]
     })
 
     @docker.start
@@ -24,7 +28,7 @@ class ApplicationJob < ActiveJob::Base
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["#{@project_unzip_path}/unzip/#{@applicant.id}:/home"]
     })
 
     @docker.start

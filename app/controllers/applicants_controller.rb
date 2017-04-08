@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging, :building]
   before_action :set_docker, only: [:update, :show]
 
   def index
@@ -8,7 +8,6 @@ class ApplicantsController < ApplicationController
 
   def show
     render :show
-    RunJob.perform_later @applicant.id
   end
 
   def new
@@ -22,6 +21,12 @@ class ApplicantsController < ApplicationController
 
   def logging
     render plain:@applicant.log
+  end
+
+  def building
+    RunJob.perform_later @applicant.id
+
+    render :show
   end
 
   def create
@@ -52,7 +57,7 @@ class ApplicantsController < ApplicationController
 =end
           output = system("sudo rm -f ./public/#{@applicant.attachment}")
           puts "rm : #{output}"
-          output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
+          output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public/#{@applicant.attachment} ./*")
           puts "zip : #{output}"
 
           # upload S3

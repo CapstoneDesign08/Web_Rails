@@ -8,42 +8,83 @@
 
 challenge01 = Challenge.create(:title => 'Feed Test',
                       :goal => 'Spring을 활용한 다양한 기능 완성하기',
-                      :information => '회원가입기능
-  - /join주소에서 Join.html페이지를 띄운다.
-  - 가입하기 버튼구현 (/login  --> /join 주소이동)
-  - Join페이지에서 아이디와 패스워드를 입력하면 DB에 아이디와 패스워드가 입력이 되도록 구현( /join  -->  /login )
-  - 중복된 아이디가 있는지 체크 만약 이미 존재하면 에러페이지를 띄우도록 한다.(ErrorPage.html)
+                      :information => '로그인 기능
+  •/login에서 Login.html을 호출
+  •/login에서 아이디와 비밀번호를 입력 후 일치할 경우 /feed로 이동
+    ※입력한 아이디가 없는 경우 ErrorPage.html 호출
+    ※비밀번호가 틀린 없는 경우 ErrorPage.html 호출
+    ※해당 아이디가 로그인 중(isEnable=false)인 경우
+    ErrorPage.html 호출
 
+가입 기능
+  •/login의 가입하기를 누를 시 /join으로 이동
+  •/join에서 Join.html을 호출
+  •/join에서 아이디와 패스워드를 입력하고 가입하기를 누를 시
+    DB에 아이디와 패스워드가 저장
+    ※중복 아이디일 경우 ErrorPage.html 호출
 
-로그인기능
-  - /login 주소에서 Login.html페이지를 띄운다.
-  - DB에 존재하는 아이디와 그에 해당하는 패스워드 입력시 해당 아이디의 상태가 로그인으로 변경( /login -->  /feed )
-  - DB에 존재하지 않는 아이디 입력시 에러페이지를 띄우도록 한다.(ErrorPage.html)
-  - 입력한 해당 아이디가 이미 로그인중인 상태라면 에러페이지를 띄우도록 한다.(ErrorPage.html)
+게시물 기능
+  •/feed에서 Feed.html 호출
+  •/feed에서 왼쪽 상단 개인정보에 로그인한 사람의 아이디, 게시물 수,
+  팔로워 수, 팔로윙 수가 반영되도록 작성
+  •/feed에서 로그아웃 클릭 시 /login으로 이동
+  •/feed에서 우측에 작성된 모든 글이 보이도록 작성
+  •/{로그인한 ID}에서 자신과 팔로우 한 사람의 글이 보이도록 작성
+  •/{다른 사람 ID}에서는 그 사람이 작성한 글만 보이도록 작성
 
+게시물 기능
+  •/feed에서 Feed.html 호출
+  •/feed에서 왼쪽 상단 개인정보에 로그인한 사람의 아이디, 게시물 수,
+  팔로워 수, 팔로윙 수가 반영되도록 작성
+  •/feed에서 로그아웃 클릭 시 /login으로 이동
+  •/feed에서 우측에 작성된 모든 글이 보이도록 작성
+  •/{로그인한 ID}에서 자신과 팔로우 한 사람의 글이 보이도록 작성
+  •/{다른 사람 ID}에서는 그 사람이 작성한 글만 보이도록 작성
 
-게시물등록기능
-  - /feed주소에서 Feed.html페이지를 띄운다.
-  - "/feed"주소로 가게되면 해당아이디의 정보와 다른사용자들의 게시물들이 제대로 보여지도록 구현
-  - 자신이 작성한 게시물수 , 팔로우수, 팔로워수가 반영되여 보여짐
-  - 로그아웃을 하게되면 제대로 상태가 바뀌도록 구현한다. ("/feed" --> "/login")
-  - 아이디를 클릭시 해당아이디의 페이지로 넘어가도록 한다. ("/feed" --> "/{userId}")
+개인 페이지 기능
+  •/feed에 뜨는 자신의 아이디를 클릭 시 /{로그인한 ID}로 이동
+  •/{로그인한 ID}에서 MyPage.html 호출
+  •/feed 또는 /{로그인한 ID}에서 다른 사람 아이디 클릭 시,
+  /{다른 사람 ID} 호출
+  •/{다른 사람 ID}에서 PersonalPage.html 호출
+  •/feed에서 왼쪽 상단 개인정보에 로그인한 사람의 아이디, 게시물 수,
+  팔로워 수, 팔로윙 수가 반영되도록 작성
+  •/{로그인한 ID}에서 로그아웃 클릭 시 /login으로 이동
+  •/{로그인한 ID} 또는 /{다른 사람 ID}에서 홈으로 클릭 시 /feed로 이동
 
-
-개인페이지기능
-  - 홈으로 버튼 구현 ("/{userId}"  --> "/feed")
-  - 로그인한 아이디의 개인페이지일 경우 로그아웃을 하게되면 상태가 바뀌도록 구현한다. ("/{userId}" --> "/login")
-  - 개인페이지로 넘어갔을때 로그인한 아이디의 개인페이지이면 "MyPage.html"을 띄우고 다른 사용자의 개인페이지이면 "PersonalPage.html"을 띄운다.
-  - 로그인한 아이디의 개인페이지에는 자신이 작성한 게시물과 자신이 팔로우한 사용자가 작성한 게시물들을 보여준다.
-  - 다른 사용자의 개인페이지는 그 사용자가 작성한 게시물들만 보여준다.
-
-
-팔로우기능
-  - 다른 사용자의 개인페이지에 들어가 팔로우등록과 팔로우취소를 할수있도록 하고 DB에 등록되도록 만든다.',
+팔로우 기능
+  •/{다른 사람 ID}에서 팔로우를 누를 경우 팔로우 등록과 취소를 구현',
                       :description => 'Tip
-  - mysql workbench에 "feed"라는 스키마를 생성하고 "src/main/java/com.feed/application.properties"에서 spring.datasource.password에 본인의 mysql password를 입력하시오.')
-challenge02 = Challenge.create(:title => 'test02',
-                     :description => '테스트02')
+  •/mysql workbench에 "feed"라는 스키마를 생성하고 "src/main/java/com.feed/application.properties"에서 spring.datasource.password에 본인의 mysql password를 입력하시오.')
+challenge02 = Challenge.create(:title => 'Board Test',
+                               :goal => 'Spring을 활용한 다양한 기능 완성하기',
+                               :information => '게시판 홈 기능
+  •/ 에서 Home.html을 호출
+  •등록된 모든 게시물(post) 객체들을 id 내림차순으로 보이도록 작성
+  •/ 에서 글쓰기 버튼 클릭 시 /write로 이동
+  •/ 게시물의 제목 클릭 시 /postview/{id} 주소로 이동
+
+게시물 작성 기능
+  •/write에서 Write.html 호출
+  •/write에서 닉네임, 제목, 내용을 작성 클릭 시 값이 저장되면서 /postview/{id}로 이동
+  •게시물 작성 시 날짜를 DB에 저장
+  •닉네임 또는 제목이 빈칸인 경우 ErrorPage.html 호출
+
+게시물 포스트뷰 기능
+  •/postview/{id} 에서 PostView.html 호출
+  •해당 id의 닉네임, 내용, 날짜, 조회수를 띄우도록 작성
+  •/ 에서 /postview/{id}로 이동 시 조회수 1 증가
+  •/postview/{id}에서 뒤로 버튼 클릭 시 /로 이동
+  •/postview/{id}에서 삭제 버튼 클릭 시 게시물 삭제 후 /로 이동
+  •/postview/{id}에서 수정 버튼 클릭 시 /postview/modify/{id}로 이동
+
+게시물 수정 기능
+  •/postview/modify/{id}에서 Modify.html을 호출
+  •/postview/modify/{id}로 넘어왔을 때 기존의 내용이 뜨도록 작성
+  •/postview/modify/{id}에서 수정 버튼을 클릭 시 수정된 내용이 반영되고, /postview/{id}로 이동
+  •수정 버튼 클릭 시 닉네임 또는 제목이 공백일 경우 ErrorPage.html을 호출',
+                               :description => 'Tip
+  - non')
 challenge01.save
 challenge02.save
 
