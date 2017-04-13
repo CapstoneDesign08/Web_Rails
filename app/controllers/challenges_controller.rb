@@ -31,12 +31,7 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.json {render plain: @applicant.log}
       TestJob.perform_later @applicant.id
-=begin      if @challenge.update(challenge_params)
-        format.html {redirect_to @challenge, notice: 'Applicant was successfully updated'}
-      else
-     format.html {render :edit}
-      end
-=end
+
     end
   end
 

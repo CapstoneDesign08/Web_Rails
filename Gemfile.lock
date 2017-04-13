@@ -28,6 +28,10 @@ GEM
     activejob (5.0.1)
       activesupport (= 5.0.1)
       globalid (>= 0.3.6)
+    activejob-traffic_control (0.1.2)
+      activejob (>= 4.2)
+      activesupport (>= 4.2)
+      suo
     activemodel (5.0.1)
       activesupport (= 5.0.1)
     activerecord (5.0.1)
@@ -71,6 +75,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
+    dalli (2.7.6)
     debug_inspector (0.0.2)
     docker-api (1.33.1)
       excon (>= 0.38.0)
@@ -237,6 +242,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
+    msgpack (1.0.2)
     multi_json (1.12.1)
     mysql2 (0.4.5)
     nio4r (1.2.1)
@@ -278,6 +284,7 @@ GEM
       json (>= 1.8)
       nokogiri (~> 1.5)
       trollop (~> 2.1)
+    redis (3.3.2)
     sass (3.4.23)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
@@ -297,6 +304,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    suo (0.3.2)
+      dalli
+      msgpack
+      redis
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (2.0.5)
@@ -325,6 +336,7 @@ PLATFORMS
 
 DEPENDENCIES
   activejob
+  activejob-traffic_control
   adapter
   bootstrap-sass
   byebug
