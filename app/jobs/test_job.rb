@@ -1,41 +1,62 @@
+# encoding: euc-kr
 class TestJob < ApplicationJob
-  # 넣어줄 특정 큐 이름
+  # �־��� Ư�� ť �̸�
   queue_as :test_queue
 
-  around_enqueue do |job, block|
-    # 실행 전에 해야하는 작업
-    block.call
-    # 실행 후에 해야하는 작업
-  end
-
   def perform(*id)
-    # 실행할 작업
+    # ������ �۾�
     @applicant = Applicant.find_by(id: id)
     @applicant.log = nil
+    @applicant.score = 0
     @applicant.save
     @docker = get_docker @applicant.id
 
-    begin
+      begin
       delete_docker
       test_docker
       @command = ['bash', '-c', 'gradle test']
       @print = @docker.exec(@command)
-      @log =  @print.to_s
-      puts @print
+      #puts @print
+      puts "---------------------------------------"
 
-      @test_pass = @log.scan("PASSED")
-      @test_fail = @log.scan("$")
-      @applicant.log = "PASSED : #{@test_pass.size} / FAILED  :  #{@test_fail.size/2}"
+
+      @answer = "answer : "
+      for i in 0..1
+          @print[i].each do |tmp|
+            @answer.concat(tmp)
+          end
+      end
+
+    puts @answer
+
+
+      #puts @print.to_s.encode("UTF-8", "EUC-KR")
+
+      @numberOfPassed = @answer.scan("PASSED").size
+      @arrFailMessages = @answer.scan(/\$[^#]+#/)
+
+      if @arrFailMessages.size > 1
+        @failMessage = "FAIL LOG : \n"
+        @arrFailMessages.each do |tmp|
+        @failMessage = @failMessage.concat(tmp)
+        end
+      else
+        @failMessage = "SUCCESS"
+      end
+
+
+      @applicant.log = @failMessage
+      @applicant.score = (@numberOfPassed * 5) + 5
       @applicant.save
 
       # delete
       delete_docker
-
-    rescue
-     delete_docker
-     puts "applicant_#{@applicant.id} docker run failed"
-    end
+      rescue
+       delete_docker
+        puts "applicant_#{@applicant.id} docker run failed"
+      end
   end
+
 
   def get_docker(id)
     begin
@@ -44,5 +65,6 @@ class TestJob < ApplicationJob
       return nil
     end
   end
+
 
 end

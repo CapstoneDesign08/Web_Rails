@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging, :building]
   before_action :set_docker, only: [:update, :show]
 
   def index
@@ -8,7 +8,6 @@ class ApplicantsController < ApplicationController
 
   def show
     render :show
-    RunJob.perform_later @applicant.id
   end
 
   def new
@@ -22,6 +21,38 @@ class ApplicantsController < ApplicationController
 
   def logging
     render plain:@applicant.log
+  end
+
+  def building
+    RunJob.perform_later @applicant.id
+
+    require 'timers'
+    timers = Timers::Group.new
+
+    paused_timer = timers.every(7) { puts "5sec paused" }
+
+    paused_timer.resume
+    10.times { timers.wait } # will fire timer
+
+    @docker = get_docker @applicant.id
+
+    @docker.delete(force: true)
+
+    begin
+
+    rescue
+      puts "applicant_#{@applicant.id} docker stop failed"
+    end
+
+    render :show
+  end
+
+  def get_docker(id)
+    begin
+      return Docker::Container.get("applicant_#{id}_run")
+    rescue
+      return nil
+    end
   end
 
   def create

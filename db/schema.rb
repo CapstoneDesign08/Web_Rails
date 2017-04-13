@@ -18,11 +18,11 @@ ActiveRecord::Schema.define(version: 20170117021736) do
     t.string   "token"
     t.integer  "score"
     t.integer  "challenge_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "attachment"
     t.string   "attachments3"
-    t.string   "log"
+    t.text     "log",          limit: 65535
     t.index ["challenge_id"], name: "index_applicants_on_challenge_id", using: :btree
   end
 

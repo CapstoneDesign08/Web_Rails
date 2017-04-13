@@ -1,14 +1,19 @@
 class ApplicationJob < ActiveJob::Base
+
+  # unzip폴더의 경로를 입력하세요
+  $project_unzip_path = "/home/user/RubyonRails/Web_Rails/unzip"
+
   def test_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_test",
-        'Image': 'feed/dennischa50/springs',
+        'Image': 'dennischa50/board',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "100#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
-    })
+        'Binds': ["#{$project_unzip_path}/#{@applicant.id}/:/home"]
+        })
+
 
     @docker.start
     @command = ['bash', '-c', 'gradle clean']
@@ -19,12 +24,12 @@ class ApplicationJob < ActiveJob::Base
   def run_docker
     @docker = Docker::Container.create(
         'name': "applicant_#{@applicant.id}_run",
-        'Image': 'feed/dennischa50/springs',
+        'Image': 'dennischa50/board',
         'Tty': true,
         'Interactive': true,
         'ExposedPorts': { '8080/tcp' => {} },
         'HostConfig': {'PortBindings': {'8080/tcp' => [{'HostPort': "110#{@applicant.id}"}]},
-        'Binds': ["/home/user/RubyonRails/Web_Rails/unzip/#{@applicant.id}:/home"]
+        'Binds': ["#{$project_unzip_path}/#{@applicant.id}:/home"]
     })
 
     @docker.start
