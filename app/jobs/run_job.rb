@@ -1,7 +1,4 @@
 class RunJob < ApplicationJob
-  include ActiveJob::TrafficControl::Throttle
-
-  throttle threshold: 5, period: 10.second, drop: false
   # 넣어줄 특정 큐 이름
   queue_as :run_queue
 
@@ -9,14 +6,18 @@ class RunJob < ApplicationJob
     # 실행할 작업
     @applicant = Applicant.find_by(id: id)
     @docker = get_docker @applicant.id
-
     begin
       delete_docker
-
-      run_docker
-
+      if @applicant.language == 'SpringBoot'
+        create_spring_run_docker
+      elsif  @applicant.language == 'RubyonRails'
+        create_rails_run_docker
+      else
+        delete_docker
+        puts "Framework was not selected"
+      end
     rescue
-      if @docker
+      if @docker != nil
         @docker.delete(force: true)
       end
       puts "applicant_#{@applicant.id} docker run failed"

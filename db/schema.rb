@@ -17,9 +17,10 @@ ActiveRecord::Schema.define(version: 20170117021736) do
     t.string   "email"
     t.string   "token"
     t.integer  "score"
+    t.string   "language",                   default: "SpringBoot"
     t.integer  "challenge_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "attachment"
     t.string   "attachments3"
     t.text     "log",          limit: 65535

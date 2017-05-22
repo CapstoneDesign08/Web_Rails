@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging, :building]
+  before_action :set_applicant, only: [:show, :edit, :update, :destroy, :logging, :building, :score]
   before_action :set_docker, only: [:update, :show]
 
   def index
@@ -21,6 +21,9 @@ class ApplicantsController < ApplicationController
 
   def logging
     render plain:@applicant.log
+  end
+  def score
+    render plain:@applicant.score
   end
 
   def building
@@ -72,20 +75,18 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       if @applicant.update(applicant_params)
         format.html {redirect_to @applicant.challenge, notice: 'Applicant was successfully updated'}
-        if @applicant.attachment
+        if @applicant.attachment != nil
+          #puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+          output = system("rm -f -r /home/user/R/Web_Rails/unzip/#{@applicant.id}/")
           output = system("unzip -o ./public/#{@applicant.attachment} -d ./unzip/#{@applicant.id} ")
           puts  "unzip : #{output}"
-=begin
-          output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
-          puts  "output is #{output}"
-          output = system("sudo cp -r ./tmp/test ./unzip/#{@applicant.id}/src")
-          puts "output is #{output}"
-=end
-          output = system("sudo rm -f ./public/#{@applicant.attachment}")
-          puts "rm : #{output}"
-          output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
-          puts "zip : #{output}"
 
+          #output = system("sudo rm -r ./unzip/#{@applicant.id}/src/test")
+          #output = system("sudo cp -r ./tmp/test ./unzip/#{@applicant.id}/src")
+          #output = system("sudo rm -f ./public/#{@applicant.attachment}")
+          #puts "rm : #{output}"
+          #output = system("cd ./unzip/#{@applicant.id} && zip -r ../../public#{@applicant.attachment} ./*")
+          #puts "zip : #{output}"
           # upload S3
           #@applicant.attachments3 = @applicant.attachment
         end
@@ -123,7 +124,7 @@ class ApplicantsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def applicant_params
-    params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id, :log)
+    params.require(:applicant).permit(:name, :email, :score, :token, :challenge_id, :attachment, :id, :log, :language)
   end
 end
 

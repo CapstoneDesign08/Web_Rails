@@ -1,5 +1,3 @@
-
-
 <%= form_for(@applicant) do |a| %>
     <% if @applicant.errors.any? %>
         <div id="error_explanation">
@@ -11,23 +9,21 @@
             <% end %>
           </ul>
         </div>
-  <% end %>
+    <% end %>
 
     <div class = "field">
       <%= a.label :name %>
-      <%= a.text_field :name %>
+      <%= a.text_field :name, style: 'width:345px; height:25px;' %>
     </div>
-
     <div class = "field">
-    <%= a.label :email %><br>
-    <%= a.text_field :email %>
+      <%= a.label :email %>
+      <%= a.text_field :email, style: 'width:350px; height:25px;'%>
     </div>
-
-    <div class = "field">
-     <%= a.label :challenge %>
-      <%= a.select(:challenge_id, @challenges.collect { |r| [r.id]}) %>
-    </div>
-    <div class = "actions">
+    <br>
+    <div class = "action">
+      <%= a.label :challenge %>
+      <%= a.select(:challenge_id, @challenges.collect { |r| [r.id]}) %> &nbsp;
       <%= a.submit %>
     </div>
+    <br>
 <% end %>

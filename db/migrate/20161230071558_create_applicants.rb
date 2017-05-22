@@ -5,10 +5,10 @@ class CreateApplicants < ActiveRecord::Migration[5.0]
       t.string :email
       t.string :token
       t.integer :score
-
+      t.string :language
       t.belongs_to :challenge, index:true
-
       t.timestamps
     end
+    change_column_default :applicants, :language, "SpringBoot"
   end
 end

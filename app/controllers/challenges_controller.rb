@@ -1,6 +1,6 @@
 class ChallengesController < ApplicationController
-  before_action :set_challenge, only: [:show, :destroy, :update, :edit]
-  before_action :set_applicant, only: [:show, :update]
+  before_action :set_challenge, only: [:show, :destroy, :update, :edit, :result]
+  before_action :set_applicant, only: [:show, :update, :result]
 
   def index
     @challenges = Challenge.all
@@ -23,7 +23,8 @@ class ChallengesController < ApplicationController
     @challenge.destroy
     redirect_to challenges_path
   end
-
+  def result
+  end
   def show
   end
 
@@ -31,7 +32,6 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.json {render plain: @applicant.log}
       TestJob.perform_later @applicant.id
-
     end
   end
 

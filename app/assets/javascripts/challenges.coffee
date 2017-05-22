@@ -2,39 +2,66 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ cnt=1
-
 $(document).ready(->
-  $('.Apprised').click(->waitime());
+  $('.gradeTest').click(->Waitime());
 );
 
-chgresult =->
+$(document).on('turbolinks:load', ->
+  ShowScores();
+);
+
+Showlog =->
   $.ajax(
     type : 'GET',
     url: '/applicants/logging/' + $('#current_id').val(),
-    dataType: 'text',
+    dataType: 'html',
     success: (json) ->(
-      $('.result').text(json)
+      $('.result').html(json)
       if(json==""&&cnt<4)
-        $('.result').text("don't touch button. retry - "+ cnt)
+        $('.result').html("don't touch button. retry - "+ cnt)
         $ cnt=cnt+1
-        setTimeout(chgresult,20000)
+        setTimeout(Showlog,25000)
       else if(cnt>=4)
-        $('.result').text("Time Over. Please, Restart.")
+        $('.result').html("Time Over. Please, Restart.")
     )
     error: (request, status, error) ->(
-#alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-      $('.result').text("TEST error")
+      alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+      $('.result').html("TEST error")
     )
   );
 
-run = ->
-  chgresult();
-  cnt=1
-  $('.Apprised').click(->waitime());
+ShowScore =->
+  $.ajax(
+    type:'GET',
+    url:'/applicants/score/'+ $('#current_id').val(),
+    dataType:'html'
+    success: (json)->(
+      $('.resultPoint').html(json+'/100 point')
+    )
+  );
 
-waitime =->
-  $('.Apprised').unbind("click");
+ShowScores =->
+  $.ajax(
+    type:'GET',
+    url:'/applicants/score/'+ $('#current_id').val(),
+    dataType:'html'
+    success: (json)->(
+      $('.scorePoint').html(json+'/100 point')
+    )
+  );
+
+
+RunAjax = ->
+  Showlog();
+  ShowScore();
+  cnt=1
+  $('.gradeTest').click(->Waitime());
+
+Waitime =->
+  $('.result').html('Ready');
+  $('.resultPoint').html('??/100 point');
+  $('.gradeTest').unbind("click");
   $ dt = new Date()
   $ dt.setSeconds(dt.getSeconds()+60);
-  $('.result').text("prediction time - "+dt.toTimeString())
-  setTimeout(run, 60000);
+  $('.result').html("Prediction Time - "+dt.toTimeString())
+  setTimeout(RunAjax, 60000);

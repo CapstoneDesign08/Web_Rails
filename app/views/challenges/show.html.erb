@@ -1,66 +1,77 @@
 <%= hidden_field_tag :current_id, "#{@applicant.id}"%>
 
-<p>
-  <strong>
-    <span style="font-size: 50pt"> Spring_web_test </span>
-  </strong>
+<head>
+  <div class="headerChallenge">
+    <img class="headerImg" src="<%=image_path('unity&web.png')%>" />
+    <div class="headerText">Spring_WebTest</div>
+    <div class="userChallenge">
+      "<%= @applicant.name %>"님 환영합니다!
+    </div>
+  </div>
+</head>
+<br>
+<br>
+<div class="showChallenge">
+  <div class="goal">
+    <strong>Goal : </strong>
+    <%= @challenge.title %> - <%= @challenge.goal %>
+  </div>
+  <br><br>
+  <hr>
+  <br><br>
+
+  <div class="infoBox">
+    Information
+    <textarea  style="width: 680px; height:400px;" readonly="readonly" ><%= @challenge.information %></textarea>
+  </div>
+  <div class="infoBox2">
+    Ex
+    <div><%= image_tag "#{@challenge.id}/1.jpg", height: '320', width: '410' %></div>
+  </div>
+
+
+  <div class="infoBox">
+    Description
+    <textarea style="width: 680px; height:75px;" readonly="readonly"><%= @challenge.description %></textarea>
+  </div>
+
+  <div class="itemChallenge">
+    <div>
+      <%=form_for @applicant do |f|%>
+      <strong>Language - </strong>
+      <%= f.select :language, [['SpringBoot'],['RubyonRails']] %>
+          <%=f.submit "Change"%>
+      <%end%>
+    </div>
+    <div>
+    <strong>File_Download : </strong>
+    <%= link_to 'link', "/download/#{@challenge.id}/#{@challenge.title}/#{@applicant.language}.zip" %>
+    <!--(, download: 'data.zip')-->
+    </div>
+
+    <div>
+    <%= form_for @applicant do |f| %>
+        <strong>Upload_File : </strong>
+        <%= f.file_field :attachment, accept: '.zip'  %>
+        <%= f.submit "Upload" %>
+    <% end %>
+    </div>
+
+    <%= form_for(@challenge, remote: true) do |g| %>
+        <strong>Submit : </strong>
+        <%= g.submit "GradeTest", class: "gradeTest" %>
+    <%end%>
+    </div>
+  </div>
+</div>
+<div class="bottomChallenge">
+  <div class="resultBox">
+    <div class="resultBold">실행상태</div>
+    <div class="resultPoint"></div>
+    <div class="result">Ready</div>
+  </div>
   <br>
-</p>
-
-<p>
-  <strong>Challenge_Show:</strong>
-  ("<%= @applicant.name %>"님 환영합니다!)
-</p>
-
-<p>
-  <strong>Title : </strong>
-  <%= @challenge.title %>
-</p>
-
-<p>
-  <strong>Goal : </strong>
-  <%= @challenge.goal %>
-</p>
-
-<table>
-  <tr>
-    <td><strong>Information : </strong></td>
-    <td><strong>Ex : </strong></td>
-  </tr>
-
-  <tr>
-    <td><textarea readonly="readonly" rows="25" cols="120" ><%= @challenge.information %></textarea></td>
-    <td valign="top" ><%= image_tag "#{@challenge.id}/1.jpg", height: '320', width: '410' %></td>
-  </tr>
-
-</table>
-
-<p>
-  <strong>Description : </strong>
-  <br>
-  <textarea readonly="readonly" rows="5" cols="120" ><%= @challenge.description %></textarea>
-
-</p>
-
-<p>
-  <strong>File_Download : </strong>
-  <%= link_to 'link', "/download/#{@challenge.id}/#{@challenge.title}.zip" %>
-  <!--(, download: 'data.zip')-->
-</p>
-
-<p>
-<%= form_for @applicant do |f| %>
-      <strong>Upload_File : </strong>
-      <%= f.file_field :attachment, accept: '.zip'  %>
-      <%= f.submit "Upload" %>
-<% end %>
-</p>
-
-<p>
-  <%= form_for(@challenge, remote: true) do |g| %>
-      <strong>Score : </strong>
-      <%= g.submit "Apprise", class: "Apprised" %>
-  <%end%>
-</p>
-
-<p class="result">
+  <div class="finChallenge">
+    <%= link_to '시험종료', '/challenges/result/'+"#{@applicant.id}", data: { confirm: 'Are you sure?' }%>
+  </div>
+</div>
